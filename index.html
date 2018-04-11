@@ -1,0 +1,50 @@
+---
+layout: default
+---
+<html>
+<header><title>The Linux Wacom Project</title>
+</header>
+
+<body>
+
+<h2 class="one">Welcome to The Linux Wacom Project!</h2>
+
+<p class="one">The Linux Wacom Project manages the drivers, libraries, and documentation for configuring and running Wacom tablets under the Linux operating system. Our drivers are pre-installed in many major distributions and provide out-of-the box support for a wide variety of Wacom tablets and TabletPCs. <br> </pr>
+
+<p class="one">Oftentimes, you can simply plug in your tablet and start working. However, in some cases a model may be too new (or obscure) to be supported out of the box. It may also be that your system is missing the necessary drivers for some reason. In these cases, our three packages below may help. Each serves a different purpose and not all are necessary. Please click on the links to get information on how to install each. Our current drivers are compatible with most distributions released since 2010. <br> </pr>
+
+<p class="one">Before proceeding, please use your distribution's package manager to perform a system update. This will ensure the latest drivers and utilities are installed and in some cases may be sufficient on its own to get a new tablet working.</p>
+
+<h2 class="one">Which software do you need?</h2>
+
+<table style="width:90%" class="main_table">
+  <tr class="white">
+    <th bgcolor="#4682b4"> Kernel Driver </th>
+    <th bgcolor="#6b8e23"> X Driver </th>
+    <th bgcolor="#b22222"> libwacom </th>
+  </tr>
+  <tr class="row_two">
+    <td> A kernel driver is necessary to initalize the tablet and translate hardware-specific protocols into standard input events. We contribute patches directly to the Linux kernel, as well as maintain an out-of-tree kernel module that enables old kernels to work with many newer tablets.
+
+</td>
+    <td>
+An X driver is responsible for translating kernel events into XInput events that can be used by applications such as GIMP. We provide an X driver that virtualizes the tablet into logical devices (e.g. stylus, eraser, touch) which report extended data like pressure and high-resolution coordinates.
+</td>
+    <td>
+The 'libwacom' library provides applications with a way to get information about any tablets that are currently connected. It may be used by control panels to better support devices and provide only relevant options or defaults for each.
+</td>
+  </tr>
+  <tr class="border_bottom">
+    <td> Install or update <a href="https://github.com/linuxwacom/input-wacom/wiki/Installing-input-wacom-from-source">input-wacom</a> if the system does not recognize your tablet and move the mouse pointer.
+    </td>
+    <td> Install or update <a href="https://github.com/linuxwacom/xf86-input-wacom/wiki/Building-The-Driver">xf86-input-wacom</a> if applications do not recognize the tablet and provide pressure-sensitivity.
+    </td>
+    <td> Install or update <a href="https://github.com/linuxwacom/libwacom/wiki">libwacom</a> if the control panel does not recognize your tablet and provide appropriate options.
+    </td>
+  </tr>
+</table>
+
+
+</body>
+</html>
+
