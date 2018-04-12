@@ -346,6 +346,14 @@ footer {
         border-right: 1px solid grey;
         border-left: 1px solid grey;
         padding: 15px;
+
+        @include mobile {
+          padding: 3px;
+	}
+    }
+
+    @include mobile {
+      border-spacing: 5px 0px;
     }
 }
 
