@@ -11,6 +11,7 @@
 		  'page': '{{ site.baseurl }}{{ page.url }}',
 		  'title': '{{ page.title | replace: "'", "\\'" }}'
 		});
+		ga('set', 'anonymizeIp', true);
 	</script>
 	<!-- End Google Analytics -->
 {% endif %}
