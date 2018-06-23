@@ -1,175 +1,141 @@
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252"><script type="text/javascript">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Wacom Pressure Curve Graph</title>
+</head>
+<body>
+<noscript>This website requires JavaScript.</noscript>
+<h2>Wacom Pressure Curve Graph</h2>
 
-    var canvas=null;
-    var ctx=null;
+Change the bezier curve by dragging the control points.
 
-    var p0_x=0;
-    var p0_y=0;
-    var p1_x=0;
-    var p1_y=0;
-    var p2_x=100;
-    var p2_y=100;
-    var p3_x=100;
-    var p3_y=100;
-    var threshold=27;
+<div style="padding: 20px">
+<div style="float: left; writing-mode: vertical-lr">&larr; output pressure</div>
+<div style="width: 208px; display:inline-block; text-align: center">
+<canvas id="canvas" width="208" height="208"></canvas>
+input pressure &rarr;
+</div>
+</div>
 
-    var x0_offset=25;
-    var y0_offset=125;
-    var x_max=100;
-    var y_max=100;
+<p>You can use this pressure curve with:</p>
 
-    var selected=1;
+<pre id="pre">
+xsetwacom set device_name PressureCurve <span id="ctrl1" style="color:red"></span> <span id="ctrl2" style="color:blue"></span>
+</pre>
 
-    var scale=2;
+<script type="text/javascript">
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
-    function init() {
-	// get the canvas element using the DOM
-	canvas = document.getElementById('pressurecurve');
+var max = 100;
 
-	// Make sure we don't execute when canvas isn't supported
-	if (canvas.getContext) {
+var scale = 2;
+ctx.scale(scale, scale);
 
-	    drawCurve();
-	} else {
-	    alert('You need Safari or Firefox 1.5+ to see this demo.');
-	}
-    }
+var startX = 0;
+var startY = max;
+var endX = max;
+var endY = 0;
 
-    function drawCurve() {
-	// use getContext to use the canvas for drawing
-	ctx = canvas.getContext('2d');
+var ctrl1X = startX;
+var ctrl1Y = startY;
+var ctrl2X = endX;
+var ctrl2Y = endY;
 
-	// Clear old canvas
-	canvas.width = 1;
+var ctrl1Span = document.getElementById("ctrl1");
+var ctrl2Span = document.getElementById("ctrl2");
 
-	canvas.width = (x0_offset+x_max+100)*scale;
-	canvas.height = (y0_offset+50)*scale;
+ctrl1Span.innerHTML = ctrl1X + " " + (max - ctrl1Y);
+ctrl2Span.innerHTML = ctrl2X + " " + ( max - ctrl2Y);
 
-	ctx.scale(scale,scale);
+function draw(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-	// use getContext to use the canvas for drawing
-	ctx = canvas.getContext('2d');
-
-	// Draw graph axis
+	// Draw axes
 	ctx.beginPath();
-	ctx.moveTo(x0_offset,y0_offset-y_max);
-	ctx.lineTo(x0_offset,y0_offset);
-	ctx.lineTo(x0_offset+x_max,y0_offset);
-	ctx.strokeStyle = "rgb(0,0,0)";
+	ctx.strokeStyle = "black";
+	ctx.moveTo(0, 0);
+	ctx.lineTo(0, max);
+	ctx.lineTo(max, max);
 	ctx.stroke();
 
-	// Draw Bezier Curve
+	// Draw reference lines
 	ctx.beginPath();
-	ctx.moveTo(x0_offset-p0_x,y0_offset-p0_y);
-	ctx.bezierCurveTo(x0_offset+p1_x,y0_offset-p1_y,
-			  x0_offset+p2_x,y0_offset-p2_y,
-			  x0_offset+p3_x,y0_offset-p3_y);
-	ctx.strokeStyle = "rgb(0,0,0)";
+	ctx.strokeStyle = "lightgray";
+	ctx.moveTo(startX, startY);
+	ctx.lineTo(ctrl1X, ctrl1Y);
+
+	ctx.moveTo(endX, endY);
+	ctx.lineTo(ctrl2X, ctrl2Y);
 	ctx.stroke();
 
-	// Draw reference line from 1st to 2nd control points
+	// Draw curve
 	ctx.beginPath();
-	ctx.moveTo(x0_offset-p0_x,y0_offset-p0_y);
-	ctx.strokeStyle = "rgb(127,127,127)";
-	ctx.lineTo(x0_offset+p1_x,y0_offset-p1_y);
+	ctx.strokeStyle = "black";
+	ctx.moveTo(startX, startY);
+	ctx.bezierCurveTo(ctrl1X, ctrl1Y, ctrl2X, ctrl2Y, endX, endY);
 	ctx.stroke();
 
-	// Draw reference line from 3rd to 4th control points
-	ctx.beginPath();
-	ctx.moveTo(x0_offset+p2_x,y0_offset-p2_y);
-	ctx.strokeStyle = "rgb(127,127,127)";
-	ctx.lineTo(x0_offset+p3_x,y0_offset-p3_y);
-	ctx.stroke();
+	// Draw control points
+	ctx.fillStyle = "red";
+	ctx.fillRect(ctrl1X, ctrl1Y, 4, 4);
 
-	// Draw fixed first and fourth control points
-	ctx.fillStyle = "rgb(0,0,255)";
-	ctx.fillRect(x0_offset+p0_x,y0_offset-p0_y, 4, 4);
-	str="("+(p0_x)+","+(p0_y)+")";
-	ctx.fillText(str, x0_offset+p0_x+10,
-		     y0_offset-p0_y+10);
-	ctx.fillStyle = "rgb(0,0,255)";
-	ctx.fillRect(x0_offset+p3_x,y0_offset-p3_y, 4, 4);
-	str="("+(p3_x)+","+(p3_y)+")";
-	ctx.fillText(str, x0_offset+p3_x+10,
-		     y0_offset-p3_y+10);
+	ctx.fillStyle = "blue";
+	ctx.fillRect(ctrl2X, ctrl2Y, 4, 4);
+}
 
-	// Draw second and third control points
-	ctx.fillStyle = "rgb(255,0,0)";
-	ctx.fillRect(x0_offset+p1_x, y0_offset-p1_y, 4, 4);
-	str="("+(p1_x)+","+(p1_y)+")";
-	ctx.fillText(str, x0_offset+p1_x+10,
-		     y0_offset-p1_y+10);
-	ctx.fillStyle = "rgb(255,0,255)";
-	ctx.fillRect(x0_offset+p2_x, y0_offset-p2_y, 4, 4);
-	str="("+(p2_x)+","+(p2_y)+")";
-	ctx.fillText(str, x0_offset+p2_x+10,
-		     y0_offset-p2_y+10);
-
-	// Shade out Threshold range
-	ctx.fillStyle = "rgba(127,127,127,0.5)";
-	ctx.fillRect(x0_offset, y0_offset-y_max,
-		     Math.round(threshold/(2048/100)), y_max);
-	ctx.fillStyle = "rgb(0,255,0)";
-	ctx.fillRect(x0_offset+Math.round(threshold/(2048/100)),
-		     y0_offset-y_max, 4, 4);
-	str="("+threshold+"/(2048/100))";
-	ctx.fillText(str, x0_offset+Math.round(threshold/(2048/100))+10,
-		     y0_offset-y_max);
-    }
-
-    function moveHandler(event) {
-        var x=Math.round(((event.clientX-canvas.offsetLeft)/scale)-x0_offset);
-	var y=Math.round(y0_offset-((event.clientY-canvas.offsetTop)/scale));
-
-	if (selected == 0) {
-	    p0_x=x;
-	    p0_y=y;
-	} else if (selected == 1) {
-	    p1_x=x;
-	    p1_y=y;
-	} else if (selected == 2) {
-	    p2_x=x;
-	    p2_y=y;
-	} else if (selected == 3) {
-	    p3_x=x;
-	    p3_y=y;
+function translateEventCoords(e){
+	var rect = canvas.getBoundingClientRect();
+	return {
+		x: (e.clientX - rect.left) / scale,
+		y: (e.clientY - rect.top) / scale
 	}
+}
 
-	drawCurve();
-    }
+var selected = null;
 
-    function downHandler(event) {
-	selected=99;
-
-        var x=Math.round(((event.clientX-canvas.offsetLeft)/scale)-x0_offset);
-	var y=Math.round(y0_offset-((event.clientY-canvas.offsetTop)/scale));
-
-	if (x >= p1_x-1 && x <= p1_x+4 && y >= p1_y-4 && y <= p1_y+1) {
-	    selected = 1;
-	} else if (x >= p2_x-1 && x <= p2_x+4 && y >= p2_y-4 && y <= p2_y+1) {
-	    selected = 2;
-	} else if (x >= p0_x-1 && x <= p0_x+4 && y >= p0_y-4 && y <= p0_y+1) {
-	    selected = 0;
-	} else if (x >= p3_x-1 && x <= p3_x+4 && y >= p3_y-4 && y <= p3_y+1) {
-	    selected = 3;
+canvas.onmousedown = function (e){
+	var pos = translateEventCoords(e);
+	if (Math.abs(pos.x - ctrl1X) < 5 && Math.abs(pos.y - ctrl1Y) < 5){
+		selected = 1;
+	} else if (Math.abs(pos.x - ctrl2X) < 5 && Math.abs(pos.y - ctrl2Y) < 5){
+		selected = 2;
 	}
+}
 
-	if (selected != 99) {
-	    canvas.onmousemove=moveHandler;
+document.body.onmousemove = function (e){
+	var pos = translateEventCoords(e);
+
+	// Enforce bounds
+	if (pos.x < 0) pos.x = 0;
+	if (pos.y < 0) pos.y = 0;
+	if (pos.y > max) pos.y = max;
+	if (pos.x > max) pos.x = max;
+
+	if (selected){
+		if (selected == 1){
+			ctrl1X = parseInt(pos.x);
+			ctrl1Y = parseInt(pos.y);
+		} else if (selected == 2){
+			ctrl2X = parseInt(pos.x);
+			ctrl2Y = parseInt(pos.y);
+		}
+		draw();
+		ctrl1.innerHTML = ctrl1X + " " +  (max - ctrl1Y)
+		ctrl2.innerHTML = ctrl2X + " " + (max - ctrl2Y)
 	}
-   }
+}
 
-   function upHandler(event) {
-       canvas.onmousemove=null;
-   }
+document.body.onmouseup = function (e){
+	selected = null;
+}
+
+if (canvas.getContext) {
+    draw();
+} else {
+    alert("Your browser doesn't support HTML canvas.");
+}
 </script>
-
-</head><body onload="init();">
-    <h2>Wacom Pressure Curve and Threshold</h2>
-    <div>
-	<canvas id="pressurecurve" onmousedown="downHandler(event);" onmouseup="upHandler(event);" width="450" height="350"></canvas>
-    </div>
-    <pre>Red=p1,Purple=p2,Green=Threshold</pre>
-
-</body></html>
+</body>
+</html>
