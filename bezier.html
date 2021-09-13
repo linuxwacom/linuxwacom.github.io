@@ -123,8 +123,9 @@
 	var y=Math.round(y0_offset-((event.clientY-canvas.offsetTop)/scale));
 
 	if (selected == 0) {
-	    p0_x=x;
-	    p0_y=y;
+            // This point is fixed to 0,0 in the driver
+	    //p0_x=x;
+	    //p0_y=y;
 	} else if (selected == 1) {
 	    p1_x=x;
 	    p1_y=y;
@@ -132,8 +133,9 @@
 	    p2_x=x;
 	    p2_y=y;
 	} else if (selected == 3) {
-	    p3_x=x;
-	    p3_y=y;
+            // This point is fixed to 100,100 in the driver
+	    //p3_x=x;
+	    //p3_y=y;
 	}
 
 	drawCurve();
