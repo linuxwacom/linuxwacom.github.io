@@ -9,8 +9,8 @@ layout: default
 <body>
   <header></header>
   <h2 class="one">Welcome to The Linux Wacom Project!</h2>
-  <p class="one">The Linux Wacom Project manages the drivers, libraries, and documentation for configuring and running Wacom tablets under the Linux operating system. Our drivers are pre-installed in many major distributions and provide out-of-the box support for a wide variety of Wacom tablets and TabletPCs.<br></p>
-  <p class="one">Oftentimes, you can simply plug in your tablet and start working. However, in some cases a model may be too new (or obscure) to be supported out of the box. It may also be that your system is missing the necessary drivers for some reason. In these cases, our three packages below may help. Each serves a different purpose and not all are necessary. Please click on the links to get information on how to install each. Our current drivers are compatible with most distributions released since 2010.<br></p>
+  <p class="one">The Linux Wacom Project manages the drivers, libraries, and documentation for configuring and running Wacom tablets under the Linux operating system. Our drivers are pre-installed in most major distributions and provide out-of-the box support for a virtually all Wacom tablets and TabletPCs.<br></p>
+  <p class="one">Usually you can simply plug in your tablet and start working. However, in some cases a model may be too new (or obscure) to be fully supported out of the box. It may also be that your system is missing the necessary drivers for some reason. In these cases, the four packages below may help. Each serves a different purpose and not all are necessary. Please click on the links to get information on which drivers you may need and how to install each. <br></p>
   <p class="one">Before proceeding, please use your distribution's package manager to perform a system update. This will ensure the latest drivers and utilities are installed and in some cases may be sufficient on its own to get a new tablet working.</p>
   <h2 class="one">Which software do you need?</h2>
   <div class="flexbox">
@@ -29,7 +29,20 @@ layout: default
     </table>
     <table class="main_table">
       <tr class="white">
-        <th bgcolor="#6B8E23">X Driver</th>
+        <th bgcolor="#ffbc00">Wayland Enviroments</th>
+      </tr>
+      <tr class="row_two">
+        <td> In Wayland environments kernel input events are processed by libinput and forwarded on towards applications. libinput is external to the linuxwacom project. Read the <a href="https://github.com/linuxwacom/xf86-input-wacom/wiki/FAQ">FAQ</a> for more information. </td>
+      </tr>
+      <tr class="border_bottom">
+        <td>
+          In this case, install or update libinput if applications do not recognize tablet events properly.
+      </td>
+      </tr>
+    </table>
+    <table class="main_table">
+      <tr class="white">
+        <th bgcolor="#6B8E23">Xorg Environments</th>
       </tr>
       <tr class="row_two">
         <td>An X driver is responsible for translating kernel events into XInput events that can be used by applications such as GIMP. We provide an X driver that virtualizes the tablet into logical devices (e.g. stylus, eraser, touch) which report extended data like pressure and high-resolution coordinates.</td>
