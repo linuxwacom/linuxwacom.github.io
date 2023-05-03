@@ -21,6 +21,3 @@ Currently, members of the project include:
 * Josh Dickens, Wacom
 * and other community members like you.
 
-### Contact us
-
-The best way to contact the members of this project is to join and send a message to the relevant  [mailing list](https://github.com/linuxwacom/input-wacom/wiki/Mailing-lists-and-Support).
