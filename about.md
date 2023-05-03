@@ -18,6 +18,7 @@ Currently, members of the project include:
 * Peter Hutterer, Red Hat
 * Jason Gerecke, Wacom
 * Aaron Armstrong Skomra, Wacom
+* Josh Dickens, Wacom
 * and other community members like you.
 
 ### Contact us
